@@ -3,7 +3,7 @@
 
 > Disclaimer: the following code may cause loss of data. Please, backup your data before using it - although it should not be able to do more damage than running the `rm` command.
 
-I was quite tired of losing files by removing them withouth thinking enough about the consequences of doing it.
+I was quite tired of losing files by removing them without thinking enough about the consequences of doing it.
 
 This is how I solved my issue, until the next reboot.
 
@@ -87,7 +87,7 @@ $ touch tmp_file
 $ rm -r tmp_folder tmp_file
 $ ls /tmp
 ```
-Run the same commands again and you'll see that you'll have stored in `/tmp/` all the files you have deleted, conveniently renamed not to overwite duplicates.
+Run the same commands again and you'll see that you'll have stored in `/tmp/` all the files you have deleted, conveniently renamed not to overwrite duplicates.
 
 The first line overrides the `rm` command with the function that follows. As expressed by the function name, the files will be moved to `/tmp/` folder and will stay there until the next reboot. Alternatively, you can modify the script to
 
