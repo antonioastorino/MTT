@@ -12,18 +12,21 @@ In `~/.bash_profile`, add the following
 ```bash
 alias rm="move_to_tmp"
 move_to_tmp() {
+  # Folder where the "deleted" files will be moved
   TRASH="/tmp"
+  
   RECURSIVE=false
+  # Parse options
   if [[ $1 == "-"* ]]; then
-  PARAM_LIST=(`echo $1 | sed 's/^-//' | sed -e's/\(.\)/\1 /g'`)
-    for CHAR in $PARAM_LIST; do
+  OPTION_LIST=(`echo $1 | sed 's/^-//' | sed -e's/\(.\)/\1 /g'`)
+    for CHAR in $OPTION_LIST; do
       case "$CHAR" in
         r)
           RECURSIVE=true
           ;;
         
         *)
-        echo "Invalid parameter: $CHAR";
+        echo "Invalid option: $CHAR";
         return 1
       esac
     done
@@ -88,8 +91,8 @@ Run the same commands again and you'll see that you'll have stored in `/tmp/` al
 
 The first line overrides the `rm` command with the function that follows. As expressed by the function name, the files will be moved to `/tmp/` folder and will stay there until the next reboot. Alternatively, you can modify the script to
 
-- move files and folders to some other location (e.g. `~/.Trash` on MacOS) by changing the `$TRASH` parameter
-- call this function differently by modifying the alias
+- move files and folders to some other location (e.g. `~/.Trash` on MacOS) by changing the `TRASH` parameter
+- call this function differently by modifying the alias name from `rm` to `something_else_you_like`
 
 Up to you.
 
