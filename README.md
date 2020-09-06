@@ -1,13 +1,19 @@
 # MTT - Move to tmp
 ## Override `rm` command to move files to /tmp instead permanently deleting them
 
-> Disclaimer: the following code may cause loss of data. Please, backup your data before using it - although it should not be able to do more damage than running the `rm` command.
+> Disclaimer: the following code may cause loss of data. Please, backup your data before using it - although it should not be able to do more damage than running the native `rm` command.
 
-I was quite tired of losing files by removing them without thinking enough about the consequences of doing it.
+### Intro
 
-This is how I solved my issue, until the next reboot.
+I was quite tired of losing files by `rm`ing them without thinking enough about the consequences of doing it.
 
-In `~/.bash_profile`, add the following
+I solved my issue by creating an alias to the `rm` command which essentially moves the files and folders I am about to remove to the system temporary folder, i.e. `/tmp`. This folder is emptied by the OS upon reboot.
+
+In case I want to use the native `rm` command, I call `/bin/rm` instead of `rm` only. 
+
+### Implementation
+
+To implement my solution, append the following code to `~/.bash_profile`.
 
 ```bash
 alias rm="move_to_tmp"
@@ -89,11 +95,13 @@ $ ls /tmp
 ```
 Run the same commands again and you'll see that you'll have stored in `/tmp/` all the files you have deleted, conveniently renamed not to overwrite duplicates.
 
-The first line overrides the `rm` command with the function that follows. As expressed by the function name, the files will be moved to `/tmp/` folder and will stay there until the next reboot. Alternatively, you can modify the script to
+### How it works
+
+The first line in the above code overrides the `rm` command with the function that follows. As expressed by the function name, the files will be moved to `/tmp/` folder and will stay there until the next reboot. If `/tmp` already contains files or folders with the same name as the one you are `rm`ing, those are renamed by using an integer as unique identifier which will be appended to or modified in the file or folder name.\
+
+Optionally, you can modify the script to
 
 - move files and folders to some other location (e.g. `~/.Trash` on MacOS) by changing the `TRASH` parameter
-- call this function differently by modifying the alias name from `rm` to `something_else_you_like`
+- call the alias differently by modifying the alias name from `rm` to `something_else_you_like`
 
-Up to you.
-
-> NOTE: If you have a folder whose name starts with `-` (dash), you can remove it by specifying the path (e.g. `./-folder_i_would_never_call_like_that`)
+> NOTE: Arguments to `rm` are parsed as options by looking for dashes at the beginning of the parameter. Hence, although it's very unusual, if you have a file or folder whose name starts with `-` (dash), you cannot remove it by calling `rm [-r] -file_or_folder_name` because `file_or_folder_name` would be interpreted as an option. Instead, you can specify the relative or full path of what you want to remove, e.g. `rm [-r] ./-file_or_folder_name`.
